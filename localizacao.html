@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificação de Permissão de Localização</title>
+  <style>
+    /* Estilos para o modal (pode personalizar conforme necessário) */
+    #modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    /* Estilos adicionais para dispositivos móveis */
+    @media only screen and (max-width: 600px) {
+      #modal {
+        width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Modal para pedir permissão -->
+<div id="modal">
+  <p>Este site gostaria de acessar sua localização. Permitir?</p>
+  <button id="allowButton">Permitir</button>
+  <button id="denyButton">Negar</button>
+</div>
+<!--
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Verificar se o navegador suporta a API de geolocalização
+    if ('geolocation' in navigator) {
+      // Tentar obter a localização para acionar a solicitação de permissão
+      navigator.geolocation.getCurrentPosition(
+        () => checkGeolocationPermission(),
+        () => alert('Falha ao obter localização. O usuário pode ter negado a permissão.')
+      );
+    } else {
+      // Navegador não suporta geolocalização
+      alert('Seu navegador não suporta geolocalização.');
+    }
+  });
+
+  function checkGeolocationPermission() {
+    navigator.permissions.query({ name: 'geolocation' }).then(permissionStatus => {
+      if (permissionStatus.state === 'granted') {
+        // Geolocalização ativada
+        alert('A geolocalização está ativada.');
+        console.log(navigator.geolocation);
+      } else if (permissionStatus.state === 'prompt') {
+        // Permissão ainda não foi decidida; mostrar o modal
+        showPermissionModal();
+      } else {
+        // Geolocalização não ativada ou permissão negada
+        alert('A geolocalização não está ativada. Por favor, ative-a para utilizar essa funcionalidade.');
+      }
+    });
+  }
+
+  function showPermissionModal() {
+    const modal = document.getElementById('modal');
+    const allowButton = document.getElementById('allowButton');
+    const denyButton = document.getElementById('denyButton');
+
+    // Mostrar o modal
+    modal.style.display = 'block';
+
+    allowButton.addEventListener('click', () => {
+      // Fechar o modal e solicitar permissão de geolocalização
+      modal.style.display = 'none';
+      navigator.geolocation.getCurrentPosition(showPosition);
+      /* navigator.geolocation.getCurrentPosition(
+        () => alert('Permissão concedida!'),
+        () => alert('Falha ao obter localização. O usuário pode ter negado a permissão.')
+      ); */
+    });
+
+    denyButton.addEventListener('click', () => {
+      // Fechar o modal e lidar com a recusa do usuário
+      modal.style.display = 'none';
+      alert('Permissão negada. O usuário precisa conceder permissão para acessar a localização.');
+    });
+  }
+
+  function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  "<br>Longitude: " + position.coords.longitude;
+}
+
+  console.log(navigator.geolocation);
+</script>-->
+<button onclick="getLocation()">Try It</button>
+<script>
+  const x = document.getElementById("demo");
+  
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+      x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+  
+  function showPosition(position) {
+    x.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude;
+  }
+  </script>
+
+</body>
+</html>
