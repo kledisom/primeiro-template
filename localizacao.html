@@ -17,13 +17,6 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
       z-index: 1000;
     }
-
-    /* Estilos adicionais para dispositivos móveis */
-    @media only screen and (max-width: 600px) {
-      #modal {
-        width: 80%;
-      }
-    }
   </style>
 </head>
 <body>
@@ -34,54 +27,50 @@
   <button id="allowButton">Permitir</button>
   <button id="denyButton">Negar</button>
 </div>
-<!--
+
 <script>
+  navigator.geolocation.getCurrentPosition(showPosition);
   document.addEventListener('DOMContentLoaded', () => {
     // Verificar se o navegador suporta a API de geolocalização
     if ('geolocation' in navigator) {
-      // Tentar obter a localização para acionar a solicitação de permissão
-      navigator.geolocation.getCurrentPosition(
-        () => checkGeolocationPermission(),
-        () => alert('Falha ao obter localização. O usuário pode ter negado a permissão.')
-      );
+      // Verificar se o usuário já deu permissão de localização
+      navigator.permissions.query({ name: 'geolocation' }).then(permissionStatus => {
+        if (permissionStatus.state === 'granted') {
+          // Usuário já deu permissão
+          alert('Permissão já concedida. Pode prosseguir com a lógica do seu aplicativo.');
+          location.href = "https://www.google.com";
+        } else if (permissionStatus.state === 'prompt' || permissionStatus.state === 'denied') {
+          // Usuário ainda não tomou uma decisão; mostrar o modal
+          showPermissionModal();
+          
+        } else {
+          // Permissão negada
+         alert('Permissão negada. O usuário precisa conceder permissão para acessar a localização.');
+          console.log(permissionStatus.state);
+
+        }
+      });
     } else {
       // Navegador não suporta geolocalização
       alert('Seu navegador não suporta geolocalização.');
     }
   });
 
-  function checkGeolocationPermission() {
-    navigator.permissions.query({ name: 'geolocation' }).then(permissionStatus => {
-      if (permissionStatus.state === 'granted') {
-        // Geolocalização ativada
-        alert('A geolocalização está ativada.');
-        console.log(navigator.geolocation);
-      } else if (permissionStatus.state === 'prompt') {
-        // Permissão ainda não foi decidida; mostrar o modal
-        showPermissionModal();
-      } else {
-        // Geolocalização não ativada ou permissão negada
-        alert('A geolocalização não está ativada. Por favor, ative-a para utilizar essa funcionalidade.');
-      }
-    });
-  }
-
   function showPermissionModal() {
     const modal = document.getElementById('modal');
     const allowButton = document.getElementById('allowButton');
     const denyButton = document.getElementById('denyButton');
 
-    // Mostrar o modal
     modal.style.display = 'block';
 
     allowButton.addEventListener('click', () => {
-      // Fechar o modal e solicitar permissão de geolocalização
+      
+      // Fechar o modal e solicitar permissão de localização
       modal.style.display = 'none';
-      navigator.geolocation.getCurrentPosition(showPosition);
-      /* navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.getCurrentPosition(
         () => alert('Permissão concedida!'),
         () => alert('Falha ao obter localização. O usuário pode ter negado a permissão.')
-      ); */
+      );
     });
 
     denyButton.addEventListener('click', () => {
@@ -95,26 +84,7 @@
   x.innerHTML = "Latitude: " + position.coords.latitude + 
   "<br>Longitude: " + position.coords.longitude;
 }
-
-  console.log(navigator.geolocation);
-</script>-->
-<button onclick="getLocation()">Try It</button>
-<script>
-  const x = document.getElementById("demo");
-  
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else { 
-      x.innerHTML = "Geolocation is not supported by this browser.";
-    }
-  }
-  
-  function showPosition(position) {
-    x.innerHTML = "Latitude: " + position.coords.latitude + 
-    "<br>Longitude: " + position.coords.longitude;
-  }
-  </script>
+</script>
 
 </body>
 </html>
